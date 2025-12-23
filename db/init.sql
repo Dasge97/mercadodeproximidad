@@ -17,7 +17,7 @@ CREATE TABLE usuarios (
   nickname VARCHAR(50) NOT NULL UNIQUE,
   email VARCHAR(150) NOT NULL UNIQUE,
   contrasena VARCHAR(255) NOT NULL,
-  tipo ENUM('comprador', 'vendedor', 'admin') NOT NULL,
+  tipo ENUM('miembro', 'admin') NOT NULL,
   lat DECIMAL(10,8) DEFAULT NULL,
   lng DECIMAL(11,8) DEFAULT NULL,
   fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -175,10 +175,10 @@ CREATE TABLE mensajes (
 -- ======================================
 INSERT INTO usuarios (id, nombre, nickname, email, contrasena, tipo, lat, lng) VALUES
   (1, 'Admin Demo', 'admin_demo', 'admin@demo.local', '$2a$10$CUsoJoPMovPnXgSY2lbYBebnxfpMSnK.vPhDaqYTSpC0Uk73wZczq', 'admin', 39.074900, -0.269700),
-  (2, 'Vendedor Tavernes', 'vendedor_tv', 'vendedor@demo.local', '$2a$10$GmvwttnPgr6vYMFGQRVTBOInnbr9x229R5v5jaGNj.BZ1goKlqGHa', 'vendedor', 39.074900, -0.269700),
-  (3, 'Comprador Demo', 'comprador_demo', 'comprador@demo.local', '$2a$10$0F1hMFG4ol52n4V/3fBkpObqQgTnGD1W/dre3IJbc1HiPsKo4VU2G', 'comprador', 39.080000, -0.270000),
-  (4, 'Vendedor Playa', 'vendedor_playa', 'playa@demo.local', '$2a$10$vn7y69iWtREgFuUfYv115eTopLzJRCMT/bmGuVVqZGQQyvr4VpnsC', 'vendedor', 39.100000, -0.230000),
-  (5, 'Comprador Centro', 'comprador_centro', 'centro@demo.local', '$2a$10$hMdTTy0vNUtkfPJJzVRtrex0lCWz.grm/zOPYdhPrVQjqPvbJyhuq', 'comprador', 39.050000, -0.300000);
+  (2, 'Usuario Tavernes', 'vendedor_tv', 'vendedor@demo.local', '$2a$10$GmvwttnPgr6vYMFGQRVTBOInnbr9x229R5v5jaGNj.BZ1goKlqGHa', 'miembro', 39.074900, -0.269700),
+  (3, 'Usuario Demo', 'comprador_demo', 'comprador@demo.local', '$2a$10$0F1hMFG4ol52n4V/3fBkpObqQgTnGD1W/dre3IJbc1HiPsKo4VU2G', 'miembro', 39.080000, -0.270000),
+  (4, 'Usuario Playa', 'vendedor_playa', 'playa@demo.local', '$2a$10$vn7y69iWtREgFuUfYv115eTopLzJRCMT/bmGuVVqZGQQyvr4VpnsC', 'miembro', 39.100000, -0.230000),
+  (5, 'Usuario Centro', 'comprador_centro', 'centro@demo.local', '$2a$10$hMdTTy0vNUtkfPJJzVRtrex0lCWz.grm/zOPYdhPrVQjqPvbJyhuq', 'miembro', 39.050000, -0.300000);
 
 INSERT INTO categorias (id, nombre, descripcion) VALUES
   (1, 'Verduras', 'Verdura fresca de proximidad'),

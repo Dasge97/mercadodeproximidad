@@ -36,7 +36,7 @@ export async function authenticateUser(identifier, password) {
   return user;
 }
 
-export async function createUser({ nombre, nickname, email, password, tipo = "comprador" }) {
+export async function createUser({ nombre, nickname, email, password, tipo = "miembro" }) {
   if (!nombre || !nickname || !email || !password) {
     throw new AppError("Faltan campos requeridos", 400);
   }

@@ -10,7 +10,7 @@
         v-for="p in products"
         :key="p.id"
         :product="p"
-        :showReservation="store.state.user?.tipo === 'comprador' && p.puntos_entrega?.length"
+        :showReservation="!!store.state.user && p.puntos_entrega?.length"
         @reserve="reserve"
       />
     </div>

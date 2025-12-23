@@ -35,7 +35,7 @@ export function login(identifier, password) {
   return request("/api/auth/login", { method: "POST", body: JSON.stringify(payload) });
 }
 
-export function register({ nombre, nickname, email, password, tipo = "comprador" }) {
+export function register({ nombre, nickname, email, password, tipo = "miembro" }) {
   return request("/api/auth/register", {
     method: "POST",
     body: JSON.stringify({ nombre, nickname, email, password, tipo })
