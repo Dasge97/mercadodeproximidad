@@ -2,14 +2,18 @@ version: "3.9"
 
 services:
   mysql:
+    container_name: mercado-mysql
     image: mysql:8.0
     restart: unless-stopped
     environment:
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-rootpass}
-    ports:
-      - "3306:3306"
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    expose:
+      - "3306"
     volumes:
-      - mysql_data:/var/lib/mysql
+      - mercado_mysql_data:/var/lib/mysql
       - ./db/init.sql:/docker-entrypoint-initdb.d/00_init.sql:ro
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-p${MYSQL_ROOT_PASSWORD}"]
@@ -21,37 +25,57 @@ services:
       - internal
 
   backend:
+    container_name: mercado-backend
     build: ./backend
     restart: unless-stopped
-    ports:
-      - "3000:3000"
     environment:
+      NODE_ENV: production
       PORT: 3000
       DB_HOST: mysql
-      DB_USER: ${MYSQL_USER:-root}
-      DB_PASSWORD: ${MYSQL_ROOT_PASSWORD:-rootpass}
-      DB_NAME: terretashop_db
-      JWT_SECRET: ${JWT_SECRET:-devsecret}
+      DB_USER: ${MYSQL_USER}
+      DB_PASSWORD: ${MYSQL_PASSWORD}
+      DB_NAME: ${MYSQL_DATABASE}
+      JWT_SECRET: ${JWT_SECRET}
     depends_on:
       mysql:
         condition: service_healthy
     networks:
       - internal
       - web
+    expose:
+      - "3000"
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=web
+      - traefik.http.routers.mercado-api.rule=Host(`mercado.dedaniel.com`) && PathPrefix(`/api`)
+      - traefik.http.routers.mercado-api.entrypoints=websecure
+      - traefik.http.routers.mercado-api.tls=true
+      - traefik.http.routers.mercado-api.priority=100
+      - traefik.http.services.mercado-api.loadbalancer.server.port=3000
 
   frontend:
-    build: ./frontend
+    container_name: mercado-frontend
+    image: nginx:alpine
     restart: unless-stopped
-    ports:
-      - "8080:80"
-    depends_on:
-      - backend
+    volumes:
+      - ./frontend/dist:/usr/share/nginx/html:ro
+      - ./frontend/nginx.conf:/etc/nginx/conf.d/default.conf:ro
     networks:
       - web
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=web
+      - traefik.http.routers.mercado.rule=Host(`mercado.dedaniel.com`)
+      - traefik.http.routers.mercado.entrypoints=websecure
+      - traefik.http.routers.mercado.tls=true
+      - traefik.http.routers.mercado.priority=10
+      - traefik.http.services.mercado.loadbalancer.server.port=80
 
 volumes:
-  mysql_data:
+  mercado_mysql_data:
 
 networks:
   internal:
+    internal: true
   web:
+    external: true
