@@ -50,6 +50,7 @@ services:
       - traefik.http.routers.mercado-api.rule=Host(`mercado.dedaniel.com`) && PathPrefix(`/api`)
       - traefik.http.routers.mercado-api.entrypoints=websecure
       - traefik.http.routers.mercado-api.tls=true
+      - traefik.http.routers.mercado-api.tls.certresolver=myresolver
       - traefik.http.routers.mercado-api.priority=100
       - traefik.http.services.mercado-api.loadbalancer.server.port=3000
 
@@ -67,6 +68,7 @@ services:
       - traefik.http.routers.mercado.rule=Host(`mercado.dedaniel.com`)
       - traefik.http.routers.mercado.entrypoints=websecure
       - traefik.http.routers.mercado.tls=true
+      - traefik.http.routers.mercado.tls.certresolver=myresolver
       - traefik.http.routers.mercado.priority=10
       - traefik.http.services.mercado.loadbalancer.server.port=80
 
